@@ -14,31 +14,22 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.arjun1194.purna.DependencyProviderImpl
+import com.arjun1194.purna.inject
 import com.arjun1194.purnadiexample.di.MyModule
 import com.arjun1194.purnadiexample.ui.theme.PurnaDIExampleTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : ComponentActivity() {
 
-
-    private lateinit var viewModel: MyViewModel
-    private lateinit var repository: MyRepository
+    private val viewModel by inject<MyViewModel>(MyModule)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val module = MyModule(applicationContext)
-        val di = DependencyProviderImpl(module)
-
-        viewModel = di.get(MyViewModel::class.java)
-        repository = di.get(MyRepository::class.java)
-
         viewModel.sayHelloToActivity()
 
         setContent {
             PurnaDIExampleTheme {
-                // i know this should be collected on lifecycle but this is a demo so it doesn't matter
-                val greeting = viewModel.state.collectAsState()
+                val greeting = viewModel.state.collectAsState() // demo hai doesn't matter
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
