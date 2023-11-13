@@ -9,4 +9,33 @@ Constructor Injection: Dependencies are injected through constructors, promoting
 Singleton Support: PurnaDI supports the creation of singleton instances, ensuring that a single instance of a class is used throughout the application.
 
 ### Getting Started
-TODO::
+
+Create a Hilt style module
+```
+object MyModule : Module {
+
+    fun provideViewModel(myRepository: MyRepository) = MyViewModel(myRepository)
+
+    fun provideMyRepository(myService: MyService) = MyRepository(myService)
+
+    fun provideMyService() = MyService()
+}
+```
+
+Use it directly to inject fields
+```
+class MainActivity : ComponentActivity() {
+
+    private val viewModel by inject<MyViewModel>(MyModule)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.sayHelloToActivity()
+
+        setContent {
+            // ...
+        }
+    }
+}
+```
+
